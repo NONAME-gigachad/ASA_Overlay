@@ -1,12 +1,13 @@
 # **ASA-Overlay**
 ASA Overlay is designed for the Ark Survival Ascended game. It allows you to view information about official servers.
 ## **Hashs**
-* **SHA1:** 6aff9d5736bd2bd628225909bbc8d8b57a7f0d63 
-* **MD5:** bd26127f7ba702806b6584ed6ab0bd53
+* **SHA1:** c292cd5b4cc7fcc4957da3e2dec8a187549f3c49
+* **MD5:** 1813c40efb14ffb7c09dc677222d03a7
 ## **How does it work?**
 You select the official server which you need for monitoring, after it added to the overlay. Overlay updates information about the servers every 15 seconds.
 ## **Personalization**
-You can change the fonts and colors of the overlay text.
+You can change the fonts and colors of the overlay text.\n
+All your settings saved and loaded from Config.ini
 ## **Keyboard shortcuts**
 * 1."Right CTRL + D" to enable/disable Overlay
 * 2."Right CTRL + S" to enable/disable sizable border Overlay
