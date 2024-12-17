@@ -42,6 +42,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.guna2Panel5 = new Guna.UI2.WinForms.Guna2Panel();
             this.guna2Button4 = new Guna.UI2.WinForms.Guna2Button();
@@ -53,7 +54,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.guna2GroupBox1 = new Guna.UI2.WinForms.Guna2GroupBox();
             this.guna2TextBox2 = new Guna.UI2.WinForms.Guna2TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.guna2Button5 = new Guna.UI2.WinForms.Guna2Button();
@@ -119,6 +119,7 @@
             this.guna2CustomCheckBox1.UncheckedState.BorderRadius = 2;
             this.guna2CustomCheckBox1.UncheckedState.BorderThickness = 2;
             this.guna2CustomCheckBox1.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.guna2CustomCheckBox1.CheckedChanged += new System.EventHandler(this.guna2CustomCheckBox1_CheckedChanged);
             // 
             // listBox1
             // 
@@ -175,6 +176,7 @@
             this.guna2CustomCheckBox2.UncheckedState.BorderRadius = 2;
             this.guna2CustomCheckBox2.UncheckedState.BorderThickness = 2;
             this.guna2CustomCheckBox2.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.guna2CustomCheckBox2.CheckedChanged += new System.EventHandler(this.guna2CustomCheckBox2_CheckedChanged);
             // 
             // label3
             // 
@@ -182,7 +184,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(321, 183);
+            this.label3.Location = new System.Drawing.Point(375, 85);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(158, 24);
             this.label3.TabIndex = 11;
@@ -195,7 +197,7 @@
             this.guna2CustomCheckBox3.CheckedState.BorderRadius = 2;
             this.guna2CustomCheckBox3.CheckedState.BorderThickness = 0;
             this.guna2CustomCheckBox3.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.guna2CustomCheckBox3.Location = new System.Drawing.Point(280, 182);
+            this.guna2CustomCheckBox3.Location = new System.Drawing.Point(334, 84);
             this.guna2CustomCheckBox3.Name = "guna2CustomCheckBox3";
             this.guna2CustomCheckBox3.Size = new System.Drawing.Size(25, 25);
             this.guna2CustomCheckBox3.TabIndex = 10;
@@ -263,6 +265,7 @@
             // 
             // guna2Panel1
             // 
+            this.guna2Panel1.Controls.Add(this.label9);
             this.guna2Panel1.Controls.Add(this.label5);
             this.guna2Panel1.Controls.Add(this.guna2Panel5);
             this.guna2Panel1.Controls.Add(this.guna2Button4);
@@ -275,6 +278,20 @@
             this.guna2Panel1.Size = new System.Drawing.Size(1174, 45);
             this.guna2Panel1.TabIndex = 15;
             this.guna2Panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.guna2Panel1_MouseDown);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(3)))), ((int)(((byte)(103)))), ((int)(((byte)(163)))));
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 16F);
+            this.label9.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.label9.Location = new System.Drawing.Point(56, 9);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(62, 30);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "V 1.1";
+            this.label9.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label9_MouseDown);
             // 
             // label5
             // 
@@ -398,7 +415,6 @@
             this.guna2GroupBox1.BorderRadius = 20;
             this.guna2GroupBox1.BorderThickness = 2;
             this.guna2GroupBox1.Controls.Add(this.guna2TextBox2);
-            this.guna2GroupBox1.Controls.Add(this.label9);
             this.guna2GroupBox1.Controls.Add(this.label8);
             this.guna2GroupBox1.Controls.Add(this.panel1);
             this.guna2GroupBox1.Controls.Add(this.guna2Button5);
@@ -446,20 +462,6 @@
             this.guna2TextBox2.SelectedText = "";
             this.guna2TextBox2.Size = new System.Drawing.Size(503, 36);
             this.guna2TextBox2.TabIndex = 22;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(201, 114);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(478, 24);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "Dev Discord: gigachad_. | https://discord.gg/pegasusasa\r\n";
-            this.label9.Visible = false;
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label8
             // 
@@ -558,8 +560,8 @@
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
         private Guna.UI2.WinForms.Guna2TextBox guna2TextBox2;
+        private System.Windows.Forms.Label label9;
     }
 }
 

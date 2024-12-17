@@ -31,6 +31,121 @@ namespace ASAMonitor
 
             colorDialog = new ColorDialog();
 
+            loadsettings();
+        }
+
+        public async Task loadsettings()
+        {
+            try
+            {
+                IniFile ini = new IniFile("Config.ini");
+                string CheckBox = ini.ReadString("Upload Info", "CheckBox");
+
+                if (CheckBox == "1")
+                {
+                    guna2CustomCheckBox1.Checked = true;
+                }
+                else
+                {
+                    guna2CustomCheckBox1.Checked = false;
+                }
+
+                CheckBox = ini.ReadString("Day Info", "CheckBox");
+
+                if (CheckBox == "1")
+                {
+                    guna2CustomCheckBox2.Checked = true;
+                }
+                else
+                {
+                    guna2CustomCheckBox2.Checked = false;
+                }
+
+                string ServersFromIni = ini.ReadString("Servers", "Ark Servers");
+
+                var servers = ServersFromIni.Split(',');
+
+                var serverresult = await ServerParser.GetFullServerList();
+
+                foreach (var Arkserver in servers)
+                {
+
+                    foreach (var server in serverresult)
+                    {
+                        if (server.Item1 == Arkserver)
+                        {
+                            string serversting = $"{server.Item1} {server.Item2}/70";
+
+
+                            if (guna2CustomCheckBox1.Checked)
+                            {
+                                if (server.Item3 == 1)
+                                {
+                                    serversting += " | Items: True";
+                                }
+                                else
+                                {
+                                    serversting += " | Items: False";
+                                }
+
+                                if (server.Item4 == 1)
+                                {
+                                    serversting += " | Chars: True";
+                                }
+                                else
+                                {
+                                    serversting += " | Chars: False";
+                                }
+                            }
+                            if (guna2CustomCheckBox2.Checked)
+                            {
+                                serversting += $" | Day: {server.Item5}";
+                            }
+
+                            listBox1.Items.Add(serversting);
+
+                            overlay.Addlistonoverlay(this);
+                        }
+                        
+                    }
+                }
+
+                //Font Settings
+                string FontSize = ini.ReadString("Size", "Font");
+
+                if (int.TryParse(FontSize, out int fontSize))
+                {
+                    guna2TextBox3.Text = fontSize.ToString();
+                    foreach (var label in Overlay.createdLabels)
+                    {
+                        label.Font = new Font("Microsoft Sans Serif", fontSize);
+                    }
+
+                }
+
+                string ColorFont = ini.ReadString("Color", "Font");
+
+                string cleanedColorString = ColorFont.Replace("Color [", "").Replace("]", "");
+
+                Color color = Color.FromName(cleanedColorString);
+
+                panel1.BackColor = color;
+
+                TextColor = color;
+
+                listBox1.ForeColor = color;
+
+                if (!OverlayStart)
+                {
+                    Task.Run(() => overlay.UpdateOverlay(this));
+                    OverlayStart = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Crash when load ini! All settings set default. {ex.Message}");
+            }
+            
         }
         public ListBox.ObjectCollection ListBoxItems
         {
@@ -92,105 +207,177 @@ namespace ASAMonitor
         }
         
         public bool OverlayStart = false;
+
+        public void SaveServers(string servername)
+        {
+            try
+            {
+                IniFile ini = new IniFile("Config.ini");
+
+                string currentServers = ini.ReadString("Servers", "Ark Servers");
+
+
+                if (!string.IsNullOrEmpty(currentServers))
+                {
+                    currentServers += "," + servername;
+                }
+                else
+                {
+                    currentServers = servername;
+                }
+
+                ini.Write("Servers", currentServers, "Ark Servers");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Crash in SaveServers! {ex.Message}");
+            }
+            
+        }
+        public void RemoveServer(string servername)
+        {
+            try
+            {
+                IniFile ini = new IniFile("Config.ini");
+
+                servername = Regex.Replace(servername, @"\s?\d+\/\d+.*", "").Trim();
+
+                string currentServers = ini.ReadString("Servers", "Ark Servers");
+
+                if (!string.IsNullOrEmpty(currentServers))
+                {
+                    var servers = currentServers.Split(',');
+
+                    var updatedServers = servers.Where(s => !s.Equals(servername, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+                    string newServers = string.Join(",", updatedServers);
+
+                    ini.Write("Servers", newServers, "Ark Servers");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Crash in RemoveServer! {ex.Message}");
+            }
+            
+        }
         private async void guna2Button1_Click(object sender, EventArgs e)
         {
-            var serverresult = await ServerParser.GetServerDetailsAsync(guna2TextBox1.Text);
-
-            guna2TextBox1.Text = "";
-
-            if (serverresult.Count == 1)
+            try
             {
-                foreach (var server in serverresult)
+                var serverresult = await ServerParser.GetServerDetailsAsync(guna2TextBox1.Text);
+
+                guna2TextBox1.Text = "";
+
+                if (serverresult.Count == 1)
                 {
-
-                    string serversting = $"{server.Item1} {server.Item2}/70";
-                    
-
-                    if (guna2CustomCheckBox1.Checked)
+                    foreach (var server in serverresult)
                     {
-                        if (server.Item3 == 1)
+
+                        string serversting = $"{server.Item1} {server.Item2}/70";
+
+
+                        if (guna2CustomCheckBox1.Checked)
                         {
-                            serversting += " | Items: True";
+                            if (server.Item3 == 1)
+                            {
+                                serversting += " | Items: True";
+                            }
+                            else
+                            {
+                                serversting += " | Items: False";
+                            }
+
+                            if (server.Item4 == 1)
+                            {
+                                serversting += " | Chars: True";
+                            }
+                            else
+                            {
+                                serversting += " | Chars: False";
+                            }
                         }
-                        else
+                        if (guna2CustomCheckBox2.Checked)
                         {
-                            serversting += " | Items: False";
+                            serversting += $" | Day: {server.Item5}";
                         }
 
-                        if (server.Item4 == 1)
+                        listBox1.Items.Add(serversting);
+
+                        SaveServers(server.Item1);
+
+                        if (!OverlayStart)
                         {
-                            serversting += " | Chars: True";
+                            Task.Run(() => overlay.UpdateOverlay(this));
+                            OverlayStart = true;
                         }
-                        else
-                        {
-                            serversting += " | Chars: False";
-                        }
+
+                        overlay.Addlistonoverlay(this);
                     }
-                    if (guna2CustomCheckBox2.Checked)
+                }
+                else if (serverresult.Count > 1)
+                {
+                    MessageBox.Show("Found more than one ark server.\nPlease select ark server from list.");
+
+                    MoreThanOneServer moreThanOneServer = new MoreThanOneServer();
+                    moreThanOneServer.Show();
+
+                    StringBuilder sb = new StringBuilder();
+
+                    moreThanOneServer.TextBox1.Font = new Font("Courier New", 10);
+                    int maxNameLength = Math.Max("Name".Length, serverresult.Max(s => s.Item1.Length));
+                    int maxPlayersLength = Math.Max("Players".Length, serverresult.Max(s => s.Item2.ToString().Length));
+
+                    sb.AppendLine($"| {"Name".PadRight(maxNameLength)} | {"Players".PadRight(maxPlayersLength)} |");
+
+                    sb.AppendLine($"| {new string('-', maxNameLength)} | {new string('-', maxPlayersLength)} |");
+
+                    foreach (var server in serverresult)
                     {
-                        serversting += $" | Day: {server.Item5}";
+                        sb.AppendLine($"| {server.Item1.PadRight(maxNameLength)} | {server.Item2.ToString().PadRight(maxPlayersLength)} |");
                     }
 
-                    listBox1.Items.Add(serversting);
-
-                    if (!OverlayStart)
+                    if (serverresult.Count > 23)
                     {
-                        Task.Run(() => overlay.UpdateOverlay(this));
-                        OverlayStart = true;
+                        moreThanOneServer.TextBox1.ScrollBars = ScrollBars.Vertical;
                     }
-
-                    overlay.Addlistonoverlay(this);
+                    moreThanOneServer.TextBox1.Text = sb.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Server not found!");
                 }
             }
-            else if (serverresult.Count > 1)
+            catch (Exception ex)
             {
-                MessageBox.Show("Found more than one ark server.\nPlease select ark server from list.");
-
-                MoreThanOneServer moreThanOneServer = new MoreThanOneServer();
-                moreThanOneServer.Show();
-
-                StringBuilder sb = new StringBuilder();
-
-                moreThanOneServer.TextBox1.Font = new Font("Courier New", 10);
-                int maxNameLength = Math.Max("Name".Length, serverresult.Max(s => s.Item1.Length));
-                int maxPlayersLength = Math.Max("Players".Length, serverresult.Max(s => s.Item2.ToString().Length));
-
-                sb.AppendLine($"| {"Name".PadRight(maxNameLength)} | {"Players".PadRight(maxPlayersLength)} |");
-
-                sb.AppendLine($"| {new string('-', maxNameLength)} | {new string('-', maxPlayersLength)} |");
-
-                foreach (var server in serverresult)
-                {
-                    sb.AppendLine($"| {server.Item1.PadRight(maxNameLength)} | {server.Item2.ToString().PadRight(maxPlayersLength)} |");
-                }
-
-                if (serverresult.Count > 23)
-                {
-                    moreThanOneServer.TextBox1.ScrollBars = ScrollBars.Vertical;
-                }
-                moreThanOneServer.TextBox1.Text = sb.ToString();
+                MessageBox.Show($"Crash in Add Server! {ex.Message}");
             }
-            else
-            {
-                MessageBox.Show("Server not found!");
-            }
+            
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(guna2TextBox3.Text, out int fontSize))
+            try
             {
-                //listBox1.Font = new Font("Courier New", fontSize);
-
-                foreach(var label in Overlay.createdLabels)
+                IniFile ini = new IniFile("Config.ini");
+                if (int.TryParse(guna2TextBox3.Text, out int fontSize))
                 {
-                    label.Font = new Font("Microsoft Sans Serif", fontSize);
+                    ini.Write("Size", fontSize.ToString(), "Font");
+                    foreach (var label in Overlay.createdLabels)
+                    {
+                        label.Font = new Font("Microsoft Sans Serif", fontSize);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid number.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Please enter a valid number.");
+                MessageBox.Show($"Crash in Font Select! {ex.Message}");
             }
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -234,44 +421,110 @@ namespace ASAMonitor
 
         private void guna2Button5_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem != null)
+            try
             {
-                
-                string cleanedItem = Regex.Replace(listBox1.SelectedItem.ToString(), @"\s?\d+\/\d+.*", "").Trim();
-
-                var label = Overlay.createdLabels.FirstOrDefault(l => l.Text.Contains(cleanedItem));
-
-                listBox1.Items.Remove(listBox1.SelectedItem);
-
-                if (label != null)
+                if (listBox1.SelectedItem != null)
                 {
-                    label.Dispose();
-                    // Обновляем визуальное представление
-                    label.Invalidate();
-                    label.Refresh();
+
+                    string cleanedItem = Regex.Replace(listBox1.SelectedItem.ToString(), @"\s?\d+\/\d+.*", "").Trim();
+
+                    var label = Overlay.createdLabels.FirstOrDefault(l => l.Text.Contains(cleanedItem));
+
+                    RemoveServer(cleanedItem);
+
+                    listBox1.Items.Remove(listBox1.SelectedItem);
+
+                    if (label != null)
+                    {
+                        label.Dispose();
+                        // Обновляем визуальное представление
+                        label.Invalidate();
+                        label.Refresh();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select server from list first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-            else
+            catch (Exception ex) 
             {
-                MessageBox.Show("Please select server from list first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Crash in Remove Button! {ex.Message}");
             }
+            
         }
 
         private void panel1_MouseClick(object sender, MouseEventArgs e)
         {
-            if (colorDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                panel1.BackColor = colorDialog.Color;
+                IniFile ini = new IniFile("Config.ini");
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    panel1.BackColor = colorDialog.Color;
 
-                TextColor = colorDialog.Color;
+                    TextColor = colorDialog.Color;
 
-                listBox1.ForeColor = colorDialog.Color;
+                    listBox1.ForeColor = colorDialog.Color;
+
+                    ini.Write("Color", colorDialog.Color.ToString(), "Font");
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Crash in colorDialog! {ex.Message}");
+            }
+            
         }
 
-        private void label9_Click(object sender, EventArgs e)
-        {
 
+        private void guna2CustomCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                IniFile ini = new IniFile("Config.ini");
+                if (guna2CustomCheckBox1.Checked)
+                {
+                    ini.Write("Upload Info", "1", "CheckBox");
+                }
+                else
+                {
+                    ini.Write("Upload Info", "0", "CheckBox");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Crash in CustomCheckBox1! {ex.Message}");
+            }
+            
+        }
+
+        private void guna2CustomCheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                IniFile ini = new IniFile("Config.ini");
+                if (guna2CustomCheckBox2.Checked)
+                {
+                    ini.Write("Day Info", "1", "CheckBox");
+                }
+                else
+                {
+                    ini.Write("Day Info", "0", "CheckBox");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Crash in CustomCheckBox2! {ex.Message}");
+            }
+            
+        }
+
+        private void label9_MouseDown(object sender, MouseEventArgs e)
+        {
+            label9.Capture = false;
+            Message m = Message.Create(base.Handle, 0xa1, new IntPtr(2), IntPtr.Zero);
+            this.WndProc(ref m);
         }
     }
 
@@ -303,6 +556,37 @@ namespace ASAMonitor
                             server["DayTime"].ToString()
                         ));
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Get Server Details: {ex.Message}");
+            }
+
+            return serverDetails;
+        }
+
+        public static async Task<List<(string, int, int, int, string)>> GetFullServerList()
+        {
+            List<(string, int, int, int, string)> serverDetails = new List<(string, int, int, int, string)>();
+
+            try
+            {
+                var response = await client.GetStringAsync("https://cdn2.arkdedicated.com/servers/asa/officialserverlist.json");
+
+                JArray serversArray = JArray.Parse(response);
+
+                foreach (var server in serversArray)
+                {
+                    string name = server["Name"].ToString();
+
+                    serverDetails.Add((
+                            name,
+                            (int)server["NumPlayers"],
+                            (int)server["AllowDownloadItems"],
+                            (int)server["AllowDownloadChars"],
+                            server["DayTime"].ToString()
+                        ));
                 }
             }
             catch (Exception ex)

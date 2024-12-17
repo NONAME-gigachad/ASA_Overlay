@@ -30,7 +30,8 @@ namespace ASAMonitor
             {
                 try
                 {
-                    foreach (var item in mainForm.ListBoxItems)
+                    List<string> itemsToProcess = mainForm.ListBoxItems.Cast<string>().ToList();
+                    foreach (var item in itemsToProcess)
                     {
                         string cleanedItem = Regex.Replace(item.ToString(), @"\s?\d+\/\d+.*", "").Trim();
 
@@ -79,12 +80,9 @@ namespace ASAMonitor
                     MessageBox.Show($"Overlay Crash! {ex.Message}");
                 }
 
+                await Task.Delay(15000);
 
-
-            await Task.Delay(15000);
             }
-
-
         }
         private void EditLabels(string newname, Form1 mainForm)
         {
