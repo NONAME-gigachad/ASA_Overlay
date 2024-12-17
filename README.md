@@ -4,7 +4,7 @@ ASA Overlay is designed for the Ark Survival Ascended game. It allows you to vie
 * **SHA1:** 6aff9d5736bd2bd628225909bbc8d8b57a7f0d63 
 * **MD5:** bd26127f7ba702806b6584ed6ab0bd53
 ## **How does it work?**
-You select the official server you need for monitoring, it is added to the overlay. Then, every 15 seconds, it updates information about the servers you have selected.
+You select the official server which you need for monitoring, after it added to the overlay. Overlay updates information about the servers every 15 seconds.
 ## **Personalization**
 You can change the fonts and colors of the overlay text.
 ## **Keyboard shortcuts**
