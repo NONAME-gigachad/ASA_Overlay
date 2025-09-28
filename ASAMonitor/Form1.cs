@@ -129,11 +129,11 @@ namespace ASAMonitor
 
                 Color color = Color.FromName(cleanedColorString);
 
-                panel1.BackColor = color;
+                panel1.BackColor = Color.LimeGreen;
 
-                TextColor = color;
+                TextColor = Color.LimeGreen;
 
-                listBox1.ForeColor = color;
+                listBox1.ForeColor = Color.LimeGreen;
 
                 if (!OverlayStart)
                 {
@@ -143,7 +143,7 @@ namespace ASAMonitor
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Crash when load ini! All settings set default. {ex.Message}");
+                MessageBox.Show($"Crash when load ini! All settings set default {ex.Message}");
             }
             
         }
