@@ -143,7 +143,7 @@ namespace ASAMonitor
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Crash when load ini! All settings set default. {ex.Message}");
+                MessageBox.Show($"Crash when load ini! All settings set default {ex.Message}");
             }
             
         }
